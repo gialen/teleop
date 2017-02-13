@@ -1,0 +1,19 @@
+<launch>
+
+  <!-- <node pkg="teleop" name="myo1" type="myo-rawNode.py"/> -->
+  <arg name="yamlFile" default="$(find teleop)/config/select_link.yaml"/>
+  <rosparam command="load" file="$(arg yamlFile)"/>
+
+  
+
+  <group ns="left_arm">
+    <node pkg="teleop" name="Extended_Madgw" type="Extended_Madgw_node" output="screen"/> 
+  </group>
+
+<!--   <group ns="right_arm">
+    <node pkg="teleop" name="Extended_Madgw" type="Extended_Madgw_node" output="screen"/>
+  </group>
+ -->
+
+
+</launch>

@@ -1,0 +1,20 @@
+
+<launch>
+
+  <arg name="yamlFile" default="$(find teleop)/config/select_link.yaml"/>
+  <rosparam command="load" file="$(arg yamlFile)"/>
+
+  
+
+  <group ns="left_arm">
+    <node pkg="teleop" name="Motion_cap" type="Motion_cap_node" output="screen"/> 
+    <node pkg="teleop" name="Hand_control" type="Hand_control_node" output="screen"/> 
+  </group>
+
+<!--   <group ns="right_arm">
+    <node pkg="teleop" name="Motion_cap" type="Motion_cap_node" output="screen"/>
+    <node pkg="teleop" name="Hand_control" type="Hand_control_node" output="screen"/>
+  </group> -->
+
+
+</launch>
