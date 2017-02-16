@@ -28,7 +28,7 @@ left_arm:
   controller_effort_cmd1: "teleoperation_controller_mt_effort/command1"
   controller_effort_cmd2: "teleoperation_controller_mt_effort/command2"
   Rvs: [1, 0, 0, 0, 0, -1, 0, 1, 0]
-  Pvs: [-0.32, -0.377, 0.39]
+  Pvs: [-0.62, -0.377, 0.39] #[-0.32, -0.377, 0.39]
   offset_elbow: [0, -0.15, 0]
   q_pre: [0.7071, 0.7071, 0, 0]
   q_nxt: [0, -0.7071, 0.7071,0]
@@ -70,7 +70,7 @@ right_arm:
   controller_effort_cmd1: "teleoperation_controller_mt_effort/command1"
   controller_effort_cmd2: "teleoperation_controller_mt_effort/command2"
   Rvs: [1, 0, 0, 0, 0, 1, 0, -1, 0]
-  Pvs: [-0.32, 0.377, 0.39]
+  Pvs: [-0.62, 0.377, 0.39] #[-0.32, 0.377, 0.39]
   offset_elbow: [0, 0.15, 0]
   q_pre: [0.7071, -0.7071, 0, 0]
   q_nxt: [0, 0.7071, -0.7071,0]

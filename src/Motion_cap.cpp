@@ -27,8 +27,10 @@ Motion_cap::Motion_cap()
     Lb_ = La_ = 3;
     Lm_ = 1;
 
-    scale_ee_ = 1.0 / 7;
-    scale_elbow_ = 0.4 / 3;
+    // scale_ee_ = 1.0 / 7;
+    // scale_elbow_ = 0.4 / 3;
+    scale_ee_ = 1 / 10;
+    scale_elbow_ = 1 / 10;
 
 
     Rvs_ <<  vec_Rvs[0], vec_Rvs[1], vec_Rvs[2],
