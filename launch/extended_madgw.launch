@@ -10,10 +10,10 @@
     <node pkg="teleop" name="Extended_Madgw" type="Extended_Madgw_node" output="screen"/> 
   </group>
 
-<!--   <group ns="right_arm">
+  <group ns="right_arm">
     <node pkg="teleop" name="Extended_Madgw" type="Extended_Madgw_node" output="screen"/>
   </group>
- -->
+
 
 
 </launch>

@@ -28,12 +28,12 @@ left_arm:
   controller_effort_cmd1: "teleoperation_controller_mt_effort/command1"
   controller_effort_cmd2: "teleoperation_controller_mt_effort/command2"
   Rvs: [1, 0, 0, 0, 0, -1, 0, 1, 0]
-  Pvs: [-0.62, -0.377, 0.39] #[-0.32, -0.377, 0.39]
+  Pvs: [-0.32, -0.377, 0.39] #[-0.62, -0.377, 0.39] #
   offset_elbow: [0, -0.15, 0]
   q_pre: [0.7071, 0.7071, 0, 0]
   q_nxt: [0, -0.7071, 0.7071,0]
   V_R_sink: false
-  simulation: true
+  simulation: false
   Snmf: [0,0.0011,0,0,0,0.0012,0,0.0078,0,0.0032,0.0018,0.0183,0,0,0,0,0,0.0099,0,0,0,0.0082,0,0]
   For_emg: "/For_l_emg"
   Arm_emg: "/Arm_l_emg"
@@ -70,12 +70,12 @@ right_arm:
   controller_effort_cmd1: "teleoperation_controller_mt_effort/command1"
   controller_effort_cmd2: "teleoperation_controller_mt_effort/command2"
   Rvs: [1, 0, 0, 0, 0, 1, 0, -1, 0]
-  Pvs: [-0.62, 0.377, 0.39] #[-0.32, 0.377, 0.39]
+  Pvs: [-0.32, 0.377, 0.39] #[-0.62, 0.377, 0.39]
   offset_elbow: [0, 0.15, 0]
   q_pre: [0.7071, -0.7071, 0, 0]
   q_nxt: [0, 0.7071, -0.7071,0]
   V_R_sink: false
-  simulation: true
+  simulation: false
   Snmf: [0, 0, 0, 0.0088,0,0,0,0,0,0,0.0011,0,0,0,0.0082,0,0.0011,0.0097,0.0017,0.0034,0.0014,0.0021,0.0018,0]
   For_emg: "/For_r_emg"
   Arm_emg: "/Arm_r_emg"

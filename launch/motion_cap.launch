@@ -11,10 +11,10 @@
     <node pkg="teleop" name="Hand_control" type="Hand_control_node" output="screen"/> 
   </group>
 
-<!--   <group ns="right_arm">
+  <group ns="right_arm">
     <node pkg="teleop" name="Motion_cap" type="Motion_cap_node" output="screen"/>
     <node pkg="teleop" name="Hand_control" type="Hand_control_node" output="screen"/>
-  </group> -->
+  </group>
 
 
 </launch>

@@ -29,8 +29,8 @@ Motion_cap::Motion_cap()
 
     // scale_ee_ = 1.0 / 7;
     // scale_elbow_ = 0.4 / 3;
-    scale_ee_ = 1 / 10;
-    scale_elbow_ = 1 / 10;
+    scale_ee_ = 1.0/10.0;
+    scale_elbow_ = 1.0 / 10.0;
 
 
     Rvs_ <<  vec_Rvs[0], vec_Rvs[1], vec_Rvs[2],
@@ -276,7 +276,9 @@ void Motion_cap::run()
 	{
 		Elbow_pos_ = (Rvs_ * (T_sb_.block<3,1>(0,3) * scale_elbow_)) + Pvs_ + offset_elbow_;
 		
-		Palm_pos_ = (Rvs_ * (T_sm_.block<3,1>(0,3) * scale_ee_)) + Pvs_;
+		Palm_pos_ = (Rvs_ * (T_sm_.block<3,1>(0,3) * scale_ee_)); //+ Pvs_;
+
+		std::cout<<"Palm_pos_"<<Palm_pos_<<std::endl;
 
 		kuka_q_ = q_pre_* q02_ * q_nxt_;
 
