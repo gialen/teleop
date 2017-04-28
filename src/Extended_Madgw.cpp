@@ -75,13 +75,17 @@ Extended_Madgw::Extended_Madgw()
 
     flag_run1_ = flag_run2_ = flag_run3_ = flag_run4_ = flag_run5_ = flag_run6_ = flag_run7_ = false;
     flag_disc_ = true;
+    flag_init_ = false;
 
-  
+    n_sample_ = 100;
+    step_=0;
+	data_ = Eigen::MatrixXd::Zero(n_sample_,3);
 
     shoulder_(0) = 2;
     shoulder_(1) = 0;
     shoulder_(2) = 0;
     shoulder_(3) = 0;
+
 }
 
 Extended_Madgw::~Extended_Madgw()
@@ -125,7 +129,17 @@ void Extended_Madgw::callback_imu_acc(const qb_interface::inertialSensorArray::C
 //tutte le vel angol provenienti dalle imu (NON MYO)
 void Extended_Madgw::callback_imu_gyro(const qb_interface::inertialSensorArray::ConstPtr& msg)
 {
-  	gyro_3_ << msg->m[ID].x, msg->m[ID].y, msg->m[ID].z;
+	if(flag_init_)
+	{
+		gyro_3_ << (msg->m[ID].x - offset_(0)), (msg->m[ID].y  - offset_(1)), (msg->m[ID].z - offset_(2));
+		// std::cout<<gyro_3_(0)<<" "<<gyro_3_(1)<<" "<<gyro_3_(2)<<std::endl;
+		
+	}
+	else
+	{
+		gyro_3_ << msg->m[ID].x, msg->m[ID].y, msg->m[ID].z;
+	}
+  	
 
   	flag_run4_  = true;
 
@@ -181,13 +195,13 @@ Eigen::Quaterniond Extended_Madgw::madgwick_kin(Eigen::Vector3d acc, Eigen::Vect
 	//Normalizzazione acc
 	acc = acc / acc.norm();
 
-	for(i = 0; i < 3; i++)
-	{
-		if(abs(gyro(i)) < 5)
-		{
-			gyro(i) = 0;	
-		}
-	}
+	// for(i = 0; i < 3; i++)
+	// {
+	// 	if(abs(gyro(i)) < 5)
+	// 	{
+	// 		gyro(i) = 0;	
+	// 	}
+	// }
 	// std::cout<<gyro(0)<<" "<<gyro(1)<<" "<<gyro(2)<<std::endl;
 	
 	//gradi to rad al sec
@@ -290,41 +304,95 @@ Eigen::Quaterniond Extended_Madgw::madgwick_kin(Eigen::Vector3d acc, Eigen::Vect
 
 void Extended_Madgw::run()
 {
+	if(flag_run4_)
+	{
+			if(step_ < n_sample_)
+			{
+				data_(step_,0) = gyro_3_(0);
+				data_(step_,1) = gyro_3_(1);
+				data_(step_,2) = gyro_3_(2);
+				step_++;
+			}
+			else
+			{
+				if(!flag_init_)
+				{
+					offset_(0) = data_.col(0).sum() / n_sample_;
+					offset_(1) = data_.col(1).sum() / n_sample_;
+					offset_(2) = data_.col(2).sum() / n_sample_;
+					flag_init_ = true;
+				}
+				
+			}
+	}
 	
 
-	if(flag_run1_ && flag_run2_ && flag_run3_ && flag_run4_ && flag_run5_ && flag_run6_ && flag_run7_ && flag_disc_)
+
+	if(flag_run1_ && flag_run2_ && flag_run3_ && flag_run4_ && flag_run5_ && flag_run6_ && flag_run7_ && flag_disc_ && flag_init_)
 	{
 
-		q_est_1_ = madgwick_kin(acc_1_, gyro_1_, q_old_1_, shoulder_(0), shoulder_.tail<3>() , elbow_(0), elbow_.tail<3>());
-		q_est_2_ = madgwick_kin(acc_2_, gyro_2_, q_old_2_, elbow_(0), elbow_.tail<3>() , wrist_(0), wrist_.tail<3>());
-		q_est_3_ = madgwick_kin(acc_3_, gyro_3_, q_old_3_, wrist_(0), wrist_.tail<3>() , palm_(0), palm_.tail<3>());
-		q_old_1_ = q_est_1_;
-		q_old_2_ = q_est_2_;
-		q_old_3_ = q_est_3_;
+	q_est_1_ = madgwick_kin(acc_1_, gyro_1_, q_old_1_, shoulder_(0), shoulder_.tail<3>() , elbow_(0), elbow_.tail<3>());
+	q_est_2_ = madgwick_kin(acc_2_, gyro_2_, q_old_2_, elbow_(0), elbow_.tail<3>() , wrist_(0), wrist_.tail<3>());
+	q_est_3_ = madgwick_kin(acc_3_, gyro_3_, q_old_3_, wrist_(0), wrist_.tail<3>() , palm_(0), palm_.tail<3>());
+	q_old_1_ = q_est_1_;
+	q_old_2_ = q_est_2_;
+	q_old_3_ = q_est_3_;
 
-		q_1Link_.w = q_est_1_.w();
-		q_1Link_.x = q_est_1_.x();
-		q_1Link_.y = q_est_1_.y();
-		q_1Link_.z = q_est_1_.z();
+	q_1Link_.w = q_est_1_.w();
+	q_1Link_.x = q_est_1_.x();
+	q_1Link_.y = q_est_1_.y();
+	q_1Link_.z = q_est_1_.z();
 
-		q_2Link_.w = q_est_2_.w();
-		q_2Link_.x = q_est_2_.x();
-		q_2Link_.y = q_est_2_.y();
-		q_2Link_.z = q_est_2_.z();
+	q_2Link_.w = q_est_2_.w();
+	q_2Link_.x = q_est_2_.x();
+	q_2Link_.y = q_est_2_.y();
+	q_2Link_.z = q_est_2_.z();
 
-		q_3Link_.w = q_est_3_.w();
-		q_3Link_.x = q_est_3_.x();
-		q_3Link_.y = q_est_3_.y();
-		q_3Link_.z = q_est_3_.z();
+	q_3Link_.w = q_est_3_.w();
+	q_3Link_.x = q_est_3_.x();
+	q_3Link_.y = q_est_3_.y();
+	q_3Link_.z = q_est_3_.z();
 
-		pub_1_.publish(q_1Link_);
-		pub_2_.publish(q_2Link_);
-		pub_3_.publish(q_3Link_);
+	pub_1_.publish(q_1Link_);
+	pub_2_.publish(q_2Link_);
+	pub_3_.publish(q_3Link_);
 	}
 
 	if(!flag_disc_)
 	{
 		pub_flag_disc_.publish(empty);
 	}
+
+
+
+	
 	std::cout<< flag_run1_<<" "<< flag_run2_<<" "<< flag_run3_<<" "<< flag_run4_<<" "<< flag_run5_<<" "<< flag_run6_<<" "<< flag_run7_<<" " <<std::endl;
 }
+
+
+// void Extended_Madgw::init()
+// {
+	
+	
+    
+// 	while(flag_init)
+// 	{
+// 		if(flag_run4_)
+// 		{
+// 			for(int i = 0; i < n_sample_; i++)
+// 	    	{
+// 		    	data_(i,0) = gyro_3_(0);
+// 		    	data_(i,1) = gyro_3_(1);
+// 		    	data_(i,2) = gyro_3_(2);
+// 		    	usleep(dt * 1000000);
+// 	   		}
+
+// 		    offset_(0) = data_.col(0).sum() / n_sample_;
+// 			offset_(1) = data_.col(1).sum() / n_sample_;
+// 			offset_(2) = data_.col(2).sum() / n_sample_;
+// 			flag_init = false;
+// 		}
+		
+// 	}
+    
+// }

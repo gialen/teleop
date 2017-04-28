@@ -85,6 +85,13 @@ private:
   Eigen::Vector4d wrist_;
   Eigen::Vector4d palm_;
 
+  //per il calcolo dell'offeset dei gyro imu schedine
+  int n_sample_, step_;
+  Eigen::MatrixXd data_;
+  Eigen::Vector3d offset_;
+  bool flag_init_;
+  
+
 
 
 
